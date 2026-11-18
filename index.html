@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quoota · Tableros</title>
+<!-- Puerta de entrada a los tableros de Quoota. NO tiene datos: solo el ícono y el enlace.
+     Los tableros siguen protegidos por el inicio de sesión de Google (solo cuentas @quoota.com). -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Quoota">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#231F20">
+<style>
+:root{--verde:#65F89E;--tinta:#231F20;--papel:#F2F0EB;--suave:#6f6e69}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--papel);color:var(--tinta);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,system-ui,sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;text-align:center;-webkit-font-smoothing:antialiased}
+img.logo{width:96px;height:96px;border-radius:24px;box-shadow:0 14px 30px -14px rgba(35,31,32,.45)}
+h1{font-size:26px;margin:20px 0 4px;letter-spacing:-.4px}
+p.sub{margin:0;color:var(--suave);font-size:15px}
+a.abrir{display:block;width:100%;max-width:340px;margin:28px auto 0;background:var(--tinta);color:var(--verde);text-decoration:none;font-weight:700;font-size:18px;
+  padding:17px 20px;border-radius:16px;-webkit-tap-highlight-color:transparent}
+a.abrir:active{transform:scale(.98)}
+.guia{display:none;width:100%;max-width:340px;margin:22px auto 0;background:#fff;border-radius:18px;padding:16px 18px;text-align:left;font-size:14.5px;line-height:1.45;
+  box-shadow:0 1px 2px rgba(35,31,32,.06),0 10px 24px -16px rgba(35,31,32,.35)}
+.guia b.t{display:block;font-size:15.5px;margin-bottom:6px}
+.guia ol{margin:6px 0 0;padding-left:20px}.guia li{margin:3px 0}
+.guia small{display:block;color:var(--suave);margin-top:8px;font-size:12.5px}
+.pie{margin-top:26px;font-size:12.5px;color:var(--suave)}
+body.yendo .abrir,body.yendo .guia,body.yendo .pie{display:none}
+</style>
+</head>
+<body>
+<img class="logo" src="apple-touch-icon.png" alt="Quoota">
+<h1>Tableros Quoota</h1>
+<p class="sub" id="sub">Cobranzas y Tesorería</p>
+<a class="abrir" id="abrir" href="#">Abrir tableros →</a>
+
+<div class="guia" id="guiaIos"><b class="t">📲 Tenlo como app en tu iPhone</b>
+  <ol><li>Toca <b>Compartir</b> <span aria-hidden="true">⬆️</span> (abajo en Safari).</li><li>Elige <b>“Agregar a inicio”</b> y toca <b>Agregar</b>.</li></ol>
+  <small>Si aparece la opción “Abrir como app web”, déjala <b>apagada</b>.</small></div>
+<div class="guia" id="guiaAnd"><b class="t">📲 Tenlo como app en tu Android</b>
+  <ol><li>Toca el menú <b>⋮</b> (arriba a la derecha en Chrome).</li><li>Elige <b>“Agregar a pantalla principal”</b> o <b>“Instalar app”</b>.</li></ol></div>
+
+<div class="pie">Solo cuentas @quoota.com</div>
+
+<script>
+// ===== ÚNICO DATO A CAMBIAR SI ALGÚN DÍA CAMBIA EL LINK: la página de inicio de los tableros =====
+var DESTINO = 'https://script.google.com/a/macros/quoota.com/s/AKfycbw_uqFqd6fSxYjVeIQTjhB-w9olXn20TkKgJ6QaP5JU-aKBYSBNOUZQmEIxgsVxf0UqzA/exec?v=inicio';
+
+var ua = navigator.userAgent || '';
+var iphone = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+var android = /Android/.test(ua);
+var desdeIcono = /[?&]app=1\b/.test(location.search);           // abierto desde el ícono de la pantalla de inicio
+var modoApp = window.navigator.standalone === true ||            // iPhone abierto como "app web"
+  (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+var abrir = document.getElementById('abrir');
+abrir.href = DESTINO;
+
+function ir() { document.body.className = 'yendo'; document.getElementById('sub').textContent = 'Abriendo…'; location.replace(DESTINO); }
+
+if (modoApp) {
+  // Como "app web" el iPhone no comparte la sesión de Google de Safari: el botón abre los tableros en Safari.
+  abrir.target = '_blank';
+} else if (desdeIcono || (!iphone && !android)) {
+  ir();                                                          // desde el ícono (o en computadora): directo a los tableros
+} else {
+  // Primera visita en el celular: se queda aquí para poder "Agregar a inicio" con el ícono de Quoota.
+  document.getElementById(iphone ? 'guiaIos' : 'guiaAnd').style.display = 'block';
+  // Lo que se guarde en la pantalla de inicio será esta misma dirección con ?app=1 (abre directo).
+  try { history.replaceState(null, '', location.pathname + '?app=1'); } catch (e) {}
+}
+</script>
+</body>
+</html>

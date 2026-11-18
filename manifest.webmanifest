@@ -1,0 +1,15 @@
+{
+  "name": "Tableros Quoota",
+  "short_name": "Quoota",
+  "description": "Acceso a los tableros de Cobranzas y Tesorería de Quoota",
+  "start_url": "./?app=1",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#F2F0EB",
+  "theme_color": "#231F20",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
